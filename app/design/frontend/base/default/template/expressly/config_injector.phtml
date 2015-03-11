@@ -1,0 +1,10 @@
+<?php 
+require_once 'app/code/local/Expressly/Migrator/Helper/ExpresslyConfig.php';
+$config = new ExpresslyConfig();
+?>
+<script>
+	var baseUrl = "<?php echo Mage::getUrl(); ?>";
+	var isRedirectToCheckoutEnabled = <?php echo $config->isRedirectToCheckout(); ?>;
+	var isRedirectToLoginEnabled = <?php echo $config->isRedirectToLogin(); ?>;
+	var servletUrl = "<?php echo ExpresslyConfig::SERVLET_URL; ?>";
+</script>

@@ -1,0 +1,83 @@
+#expresslyOfferContent {
+	border: 1px solid #e4e4e4;
+	margin-top: 20px;
+	padding: 10px;
+}
+
+#expresslyOfferImage {
+	float: left;
+	margin-right: 10px;
+}
+
+#expresslyClearer {
+	clear: both;
+}
+
+.expresslyOfferHeading {
+	font-size: 15px;
+}
+
+#expresslyOfferButton {
+	background-color: grey;
+	color: white;
+	font-size: 20px;
+	width: 90px;
+}
+
+.expresslyTitle {
+	color: #e25203;
+	font-weight: bold;
+	margin: 0 0 6px;
+	padding: 15px 0 0;
+	font-size: 12px;
+}
+
+#expresslyOfferButtonContainer {
+	float: right;
+	margin-right: 45px;
+	margin-top: -5px;
+	position: sticky;
+	text-align: center;
+	width: 90px;
+}
+
+#expresslyOfferButtonContainer a {
+	text-decoration: none;
+}
+
+#expresslyLayout {
+    height: 100%;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}
+
+#expresslyFloatingContent {
+	margin: 0 auto;
+	padding: 5px;
+	z-index: 11;
+	margin-top: -252px;
+	max-width: 865px;
+	position: relative;
+    top: 50%;
+}
+
+#expresslyContinueButton {
+	bottom: 73px;
+    height: 41px;
+    left: 426px;
+    position: relative;
+    width: 168px;
+}
+
+#expressly-admin-page-content {
+	text-align: center;
+	padding: 30px;
+}
+
+.modulecheckstepname {
+	width: 100px;
+}

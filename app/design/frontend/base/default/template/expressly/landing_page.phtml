@@ -1,0 +1,17 @@
+<?php 
+require_once 'app/code/local/Expressly/Migrator/Helper/ExpresslyConfig.php';
+$config = new ExpresslyConfig();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script>
+	var baseUrl = "<?php echo Mage::helper('core/url')->getCurrentUrl(); ?>";
+	var isRedirectToCheckoutEnabled = <?php echo $config->isRedirectToCheckout(); ?>;
+	var isRedirectToLoginEnabled = <?php echo $config->isRedirectToLogin(); ?>;
+	var servletUrl = "<?php echo ExpresslyConfig::SERVLET_URL; ?>";
+</script>
+</head>
+<body onload="expresslyTrigger()" onhashchange="expresslyTrigger()"></body>
+</html>

@@ -1,0 +1,58 @@
+.selfCheckStepName {
+	width: 300px;
+	overflow: hidden;
+}
+
+.selfCheckStepName,.selfCheckStepResult {
+	display: inline-block;
+}
+
+#endpointCheckLauncher {
+	width: 100px;
+	padding: 15px;
+	text-align: center;
+	border-radius: 5px;
+	border: 1px solid black;
+	color: black;
+	font-weight: bold;
+}
+
+#endpointCheckLauncher:hover {
+	background-color: #dbdbdb;
+}
+
+fieldset#endpoint_check a {
+	text-decoration: none;
+}
+
+.underlineText {
+	text-decoration: underline;
+}
+
+.expresslyLongInput {
+	width: 500px;
+	border: 1px solid black;
+}
+
+.expresslyLargeButton {
+	border: 1px solid black;
+	width: 70px;
+}
+
+#expresslyLogo {
+	float: right;
+}
+
+.clearer {
+	clear: both;
+}
+
+#modulechecstep_1_howtofix,#modulechecstep_2_howtofix,#modulechecstep_3_howtofix,#modulechecstep_4_howtofix,#modulechecstep_5_howtofix,#modulechecstep_6_howtofix {
+	display: none;
+    margin-left: 15px;
+}
+
+.howtofix_content {
+	display: none;
+    margin-left: 25px;
+}

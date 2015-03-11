@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Expressly_Migrator>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Expressly_Migrator>
+	</modules>
+</config>
