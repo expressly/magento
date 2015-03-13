@@ -106,7 +106,7 @@ function checkSelfUserInformationEndpoint() {
 function checkServletEndpoints() {
 	document.querySelector('#checkStep5').innerHTML += loadingMessage;
 	
-	createCall("GET", baseUrl + "expressly/index/migration?data", function (data) {
+	createCall("GET", baseUrl + "expressly/index/migration?data=1", function (data) {
 		if(data.readyState == 4 && data.status == 500) {
 			document.querySelector('.modulechecstep_5_result').innerHTML = tickIco;
 		} else {
