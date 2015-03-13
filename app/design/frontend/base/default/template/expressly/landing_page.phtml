@@ -8,10 +8,10 @@ $config = new ExpresslyConfig();
 <head>
 <script>
 	var baseUrl = "<?php echo Mage::helper('core/url')->getCurrentUrl(); ?>";
-	var isRedirectToCheckoutEnabled = <?php echo $config->isRedirectToCheckout(); ?>;
+	var isRedirectEnabled = <?php echo $config->isRedirectEnabled(); ?>;
 	var isRedirectToLoginEnabled = <?php echo $config->isRedirectToLogin(); ?>;
-	var servletUrl = "<?php echo ExpresslyConfig::SERVLET_URL; ?>";
+	var redirectDestination = "<?php echo $config->getRedirectDestination(); ?>";
 </script>
 </head>
-<body onload="expresslyTrigger()" onhashchange="expresslyTrigger()"></body>
+<body></body>
 </html>

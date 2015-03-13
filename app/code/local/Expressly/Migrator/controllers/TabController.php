@@ -30,12 +30,35 @@ class Expressly_Migrator_TabController extends Mage_Adminhtml_Controller_Action 
         $this->loadLayout();
         	
         Mage::register('postCheckoutBox', $config->isPostCheckOutBox());
-        Mage::register('redirectToCheckout', $config->isRedirectToCheckout());
+        Mage::register('redirectEnabled', $config->isRedirectEnabled());
         Mage::register('redirectToLogin', $config->isRedirectToLogin());
-        Mage::register('modulePass', $this->authService->getAuthToken());
+        Mage::register('redirectDestination', $config->getRedirectDestination());
+        Mage::register('modulePass', base64_encode($this->authService->getAuthToken()));
+        Mage::register('pureModulePass', $this->authService->getAuthToken());
         
         $this->_setActiveMenu('expressly_menu');
         $this->renderLayout();
+    }
+    
+    /**
+     * Updates the redirect destination.
+     */
+    public function storeRedirectDestinationAction() {
+    	$newValue = $this->getRequest ()->getParam ('redirect-destination');
+    	$baseUrl = str_replace("index.php/", "", Mage::getUrl());
+    	
+    	if(strpos($newValue, $baseUrl) !== false) {
+    		$newValue = str_replace($baseUrl, "", $newValue);
+    	}
+    	
+    	$w = Mage::getSingleton ( 'core/resource' )->getConnection ( 'core_write' );
+    	$data = array("option_value" => $newValue);
+    	$where = "option_name = 'redirect_destination'";
+    	$w->update(self::OPTIONS_TABLE, $data, $where);
+    	$message = $this->__('User redirect destination has been updated successfully.');
+    	Mage::getSingleton('adminhtml/session')->addSuccess($message);
+    	
+    	$this->_redirect('*/*/index');
     }
     
     /**

@@ -1,31 +1,12 @@
-var newCustomerName = "";
-var newDiscount = "";
-
-/**
- * Creates a CORS request
- */
-function createCORSRequest(method, url) {
-	var xhr = new XMLHttpRequest();
-	
-	if (typeof XDomainRequest != "undefined") {
-		xhr = new XDomainRequest();
-		xhr.open(method, url);
-	} else if ("withCredentials" in xhr) {
-		xhr.open(method, url, true);
-	} else {
-		xhr = null;
-	}
-	return xhr;
-}
-
 /**
  * Creates a call
  */
 function createCall(method, url, callbackOnSuccess, callbackOnFail, authHeader, postMarameters) {
-	var xhr = createCORSRequest(method, url);
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, url, true);
 
 	if (!xhr) {
-		throw new Error('CORS not supported');
+		throw new Error('Failed to create AJAX request');
 	}
 
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -61,60 +42,56 @@ function expresslyTrigger() {
 	var hashParameters = location.href.split("#")[1];
 
 	if (hashParameters) {
+		document.querySelector("#expressly_popup_page .cancel").style.display = "none";
+		document.querySelector("#expressly_popup_page .ok").style.display = "none";
+		document.querySelector("#expressly_popup_page .expressly_loader").style.display = "block";
 		
-		createCall("GET", baseUrl + "expressly/index/migration?data=" + hashParameters, function(xhr) {
+		var subscribeCheckbox = document.getElementById('subscribeNewsletter');
+		var subscribe = subscribeCheckbox ? subscribeCheckbox.checked : true;
+		
+		createCall("GET", baseUrl + "expressly/index/migration?data=" + hashParameters + "&subscribeNewsLetter=" + subscribe, function(xhr) {
 			var responseText = xhr.responseText;
 			if (xhr.readyState == 4 && xhr.status == 200) {
-				
 				// Ping the checkout page
-				createCall("GET", baseUrl + "checkout/onepage", function() {
+				createCall("GET", baseUrl + "checkout/onepage", function(xhr) {
+					redirectUser();
 		        });
-				var responseArray = xhr.responseText.split(";");
-				
-				// Used by the offer frame logic to update the content.
-				document.body.innerHTML += '<input type="hidden" id="expresslyCr" name="expresslyCr" value="' + responseArray[0] + '"/>';
-				
-				newCustomerName = responseArray[0];
-				newDiscount = responseArray[1];
-
-				hideWhiteOverlay();
 			} else if(xhr.readyState == 4 && xhr.status == 204) {
-				hideWhiteOverlay();
 				alert("Migration error - User does not exist in A");
 			} else if(xhr.readyState == 4 && xhr.status == 409) {
 				if(isRedirectToLoginEnabled) {
 					var loginDataArray = xhr.responseText.split("|");
 					setCookie("expresslylogindata", loginDataArray[0]);
 					
+					// TODO: Check if this still needed
 					createCall("GET", baseUrl + "/expressly/index/addProductAndCoupon?user_email="+loginDataArray[0]+"&product_id="+loginDataArray[1]+"&coupon_code="+loginDataArray[2], function() {
 						// Ping the checkout page
 						createCall("GET", baseUrl + "checkout/onepage", function() {
-							hideWhiteOverlay();
-							alert("You already have an account here.");
+							alert("You are already registered. Please login with you username and password.");
 							window.location.replace(baseUrl + "customer/account/login");
 				        });
 			        });
 				} else {
-					hideWhiteOverlay();
-					alert("You already have an account here.");
+					alert("You are already registered. Please login with you username and password.");
 				}
+			} else if(xhr.readyState == 4 && xhr.status == 500) {
+				if(xhr.responseText != "") {
+					alert("Oops, something went wrong on our side. You can still access the amazing offer with this coupon code " + xhr.responseText + ".");
+				} else {
+					alert("Oops, something went wrong on our side. We are working hard to fix it. You can still shop at this website.");
+				}
+				document.querySelector("#expressly_popup_page .cancel").style.display = "block";
+				document.querySelector("#expressly_popup_page .expressly_loader").style.display = "none";
 			} else {
-				hideWhiteOverlay();
-				alert("Migration fail");
+				alert("Oops, something went wrong on our side. We are working hard to fix it. You can still shop at this website.");
+				document.querySelector("#expressly_popup_page .cancel").style.display = "block";
+				document.querySelector("#expressly_popup_page .expressly_loader").style.display = "none";
 			}
 		}, function(xhr) {
-			hideWhiteOverlay();
-			alert("Migration fail");
+			alert("Oops, something went wrong on our side. We are working hard to fix it. You can still shop at this website.");
+			document.querySelector("#expressly_popup_page .cancel").style.display = "block";
+			document.querySelector("#expressly_popup_page .expressly_loader").style.display = "none";
 		});
-	}
-}
-
-/**
- * Event handler for ifram loaded
- */
-function offerIframeLoaded() {
-	if(newCustomerName != "" && newDiscount != "") {
-		document.getElementById("expresslyOfferFrame").contentWindow.postMessage('updateUserData:' + newCustomerName + ';' + newDiscount + '%', '*');
 	}
 }
 
@@ -122,7 +99,7 @@ function offerIframeLoaded() {
  * Generates hash for the offer.
  */
 function generateHashForOffer() {
-	createCall("GET", servletUrl + "/admin/getmodulehash?email=" + document.querySelector('#expresslyUserEmail').value, function(xhr) {
+	createCall("GET", baseUrl + "/admin/getmodulehash?email=" + document.querySelector('#expresslyUserEmail').value, function(xhr) {
 		var responseText = xhr.responseText;
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			document.querySelector('#expresslyOfferLink').href = xhr.responseText;
@@ -133,11 +110,13 @@ function generateHashForOffer() {
 }
 
 /**
- * Redirects to the checkout page
+ * Redirects the user to the desired page
  */
-function redirectToCheckout() {
-	if(isRedirectToCheckoutEnabled) {
-		window.location.replace(baseUrl + "checkout/onepage");
+function redirectUser() {
+	if(isRedirectEnabled) {
+		window.location.replace(baseUrl + redirectDestination);
+	} else {
+		window.location.replace(baseUrl);
 	}
 }
 
@@ -202,4 +181,18 @@ function getCookie(name) {
 		}
 	}
 	return value;
+}
+
+/**
+ * Opens the terms and conditions window.
+ */
+function openTerms() {
+	window.open(baseUrl + "terms-and-conditions");
+}
+
+/**
+ * Opens the privacy-policy
+ */
+function openPrivacy() {
+	window.open(baseUrl + "privacy-and-cookies-policy");
 }

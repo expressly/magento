@@ -3,7 +3,6 @@
 	var authToken = "<?php echo Mage::registry('modulePass'); ?>";
 	var tickIco = '<img src="<?php echo $this->getSkinUrl('images/tick.png') ?>" />';
 	var crossIco = '<img src="<?php echo $this->getSkinUrl('images/cross.png') ?>" />';
-	var servletUrl = "<?php echo ExpresslyConfig::SERVLET_URL; ?>";
 </script>
 
 <h1>Expressly Admin Panel</h1>
@@ -18,8 +17,13 @@
         </div>
         <input id="general_config-state" type="hidden" value="0" name="config_state[general_config]">
         <fieldset style="display: none;" class="config collapseable" id="general_config">
-            <input type="checkbox" name="redirect-to-checkout" onclick="updateRedirectToCheckout(this)" <?php if(Mage::registry('redirectToCheckout') == "true") { ?>checked="checked"<?php } ?> /> Redirect incoming customers to checkout
-            <br />
+            <form method="post" action="<?php echo $this->getUrl('*/*/storeRedirectDestination'); ?>" onsubmit="return checkNewRedirectAddress();">
+                <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+                <input type="checkbox" name="redirect-users" onclick="updateRedirectEnabled(this)" <?php if(Mage::registry('redirectEnabled') == "true") { ?>checked="checked"<?php } ?> /> Redirect users? <?php echo str_replace("index.php/", "", Mage::getUrl()); ?><input type="text" id="redirect-destination-field" name="redirect-destination" value="<?php echo Mage::registry('redirectDestination'); ?>"  <?php if(Mage::registry('redirectEnabled') != "true") { ?>disabled="disabled"<?php } ?>/><a id="userRedirectionTestLink" href="JavaScript:testUserRedirection();" <?php if(Mage::registry('redirectEnabled') != "true") { ?>style="display:none"<?php } ?>>Test redirection</a>
+            	<br />
+                <input class="expresslyLargeButton" type="submit" name="save" value="Save" />
+            </form>
+            <br /><br />
             <input type="checkbox" name="post-checkout-box" onclick="updatePostCheckoutBox(this)" <?php if(Mage::registry('postCheckoutBox') == "true") { ?>checked="checked"<?php } ?> disabled="disabled" /> Include promo recommendation on order page
             <br />
             <input type="checkbox" name="redirect-to-login" onclick="updateRedirectToLogin(this)" <?php if(Mage::registry('redirectToLogin') == "true") { ?>checked="checked"<?php } ?> /> Redirect existing customers to login
@@ -78,7 +82,7 @@
             <br /><br />
             <form method="post" action="<?php echo $this->getUrl('*/*/storeModulePass'); ?>" onsubmit="return confirm('The new password will be sent to expressly')">
                 <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
-                <input class="expresslyLongInput" type="text" name="modulePass" value="<?php echo Mage::registry('modulePass'); ?>" />
+                <input class="expresslyLongInput" type="text" name="modulePass" value="<?php echo htmlspecialchars(Mage::registry('pureModulePass')); ?>" />
                 <br /><br />
                 <input class="expresslyLargeButton" type="submit" name="save" value="Save" />
             </form>

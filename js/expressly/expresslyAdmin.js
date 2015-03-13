@@ -34,12 +34,12 @@ function checkSelfStoreUserEndpount() {
 			createCall("GET", baseUrl + "/expressly/admin/deleteUserByMail?user_mail=endpoint.test@buyexpressly.com", function(data) {
 				document.querySelector('.modulechecstep_1_result').innerHTML = tickIco;
 				checkSelfUserInformationEndpoint();
-			}, function () {}, "Basic " + authToken);
+			}, function () {}, "Expressly " + authToken);
 		} else {
 			document.querySelector('.modulechecstep_1_result').innerHTML = crossIco;
 			document.querySelector('#modulechecstep_1_howtofix').style.display = "inline";
 		}
-	}, function () {}, "Basic " + authToken, postData);
+	}, function () {}, "Expressly " + authToken, postData);
 }
 
 /**
@@ -74,7 +74,7 @@ function checkSelfUserInformationEndpoint() {
 						
 						createCall("GET", baseUrl + "/expressly/admin/deleteUserByMail?user_mail=endpoint.test@buyexpressly.com", function(data) {
 							document.querySelector('.modulechecstep_1_result').innerHTML = tickIco;
-						}, function () {}, "Basic " + authToken);
+						}, function () {}, "Expressly " + authToken);
 						
 						// Check the result
 						for(var i = 0; i < getUserInfoResults.length; i++) {
@@ -90,13 +90,13 @@ function checkSelfUserInformationEndpoint() {
 							document.querySelector('.modulechecstep_2_result').innerHTML = crossIco;
 							document.querySelector('#modulechecstep_2_howtofix').style.display = "inline";
 						}
-					}, function () {}, "Basic " + authToken, postData);
+					}, function () {}, "Expressly " + authToken, postData);
 				} else {
 					document.querySelector('.modulechecstep_2_result').innerHTML = crossIco;
 					document.querySelector('#modulechecstep_2_howtofix').style.display = "inline";
 				}
-			}, function () {}, "Basic " + authToken, postData);
-		}, function () {}, "Basic " + authToken);
+			}, function () {}, "Expressly " + authToken, postData);
+		}, function () {}, "Expressly " + authToken);
 	});
 }
 
@@ -106,7 +106,7 @@ function checkSelfUserInformationEndpoint() {
 function checkServletEndpoints() {
 	document.querySelector('#checkStep5').innerHTML += loadingMessage;
 	
-	createCall("GET", servletUrl + "/newmigration?data&cookies", function (data) {
+	createCall("GET", baseUrl + "expressly/index/migration?data", function (data) {
 		if(data.readyState == 4 && data.status == 500) {
 			document.querySelector('.modulechecstep_5_result').innerHTML = tickIco;
 		} else {
@@ -125,10 +125,20 @@ function updatePostCheckoutBox(selfElement) {
 }
 
 /**
- * Updates the redirect to checkout option
+ * Updates the redirect user option
  */
-function updateRedirectToCheckout(selfElement) {
-	createCall("GET", baseUrl + "/expressly/admin/updateRedirectToCheckout?redirect-to-checkout=" + selfElement.checked, function (data) {
+function updateRedirectEnabled(selfElement) {
+	var textField = document.querySelector('#redirect-destination-field');
+	textField.disabled = !textField.disabled;
+	
+	var testLink = document.querySelector('#userRedirectionTestLink');
+	if(testLink.style.display == "none") {
+		testLink.style.display = "inline";
+	} else {
+		testLink.style.display = "none";
+	}
+	
+	createCall("GET", baseUrl + "/expressly/admin/updateRedirectEnabled?redirect-enabled=" + selfElement.checked, function (data) {
 	}, function () {});
 }
 
@@ -138,4 +148,36 @@ function updateRedirectToCheckout(selfElement) {
 function updateRedirectToLogin(selfElement) {
 	createCall("GET", baseUrl + "/expressly/admin/updateRedirectToLogin?redirect-to-login=" + selfElement.checked, function (data) {
 	}, function () {});
+}
+
+/**
+ * Tests the user redirection
+ */
+function testUserRedirection() {
+	if(checkNewRedirectAddress()) {
+		var destinationValue = document.querySelector('#redirect-destination-field').value;
+		
+		if(destinationValue.indexOf("http") > -1) {
+			window.open(destinationValue);
+		} else {
+			window.open(baseUrl + destinationValue);
+		}
+	}
+}
+
+/**
+ * Checks if the new redirect destination value is valid.
+ * @returns {Boolean}
+ */
+function checkNewRedirectAddress() {
+	var returnValue = true;
+	var destinationValue = document.querySelector('#redirect-destination-field').value;
+	var webshopRoot = baseUrl.replace("index.php/", "");
+	
+	if((destinationValue.indexOf("http") > -1 && destinationValue.indexOf(webshopRoot) == -1) || destinationValue.indexOf("/") == 0) {
+		alert("Please check the format of the redirect url you're pasting. It should be relative to " + webshopRoot + ".");
+		returnValue = false;
+	}
+	
+	return returnValue;
 }

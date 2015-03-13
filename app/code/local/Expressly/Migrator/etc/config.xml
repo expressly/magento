@@ -40,6 +40,15 @@
 	            <class>Expressly_Migrator_Helper</class>
 	        </expressly>
     	</helpers>
+    	<template>
+            <email>
+                <expressly_password_reset_template>
+                    <label>ExpresslyPasswordReset</label>
+                    <file>expressly_password_reset.html</file>
+                    <type>html</type>
+                </expressly_password_reset_template>
+            </email>
+        </template>
 	</global>
 	<admin>
         <routers>

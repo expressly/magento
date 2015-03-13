@@ -34,14 +34,14 @@ class Expressly_Migrator_AdminController extends Mage_Core_Controller_Front_Acti
     }
     
     /**
-     * Updates the redirect to checkout option
+     * Updates the redirect user option
      */
-    public function updateRedirectToCheckoutAction(){
-    	$newValue = $this->getRequest()->getParam('redirect-to-checkout');
+    public function updateRedirectEnabledAction(){
+    	$newValue = $this->getRequest()->getParam('redirect-enabled');
     	if($newValue != null && $newValue != "") {
     		$w = Mage::getSingleton ( 'core/resource' )->getConnection ( 'core_write' );
     		$data = array("option_value" => $newValue);
-    		$where = "option_name = 'redirect_to_checkout'";
+    		$where = "option_name = 'redirect_enabled'";
     		$w->update(self::OPTIONS_TABLE, $data, $where);
     	}
     }

@@ -14,8 +14,6 @@ $w = Mage::getSingleton( 'core/resource' )->getConnection('core_read');
 $modulePasswordQuery = $w->query("SELECT value FROM core_config_data WHERE path = 'web/secure/base_url'");
 $row = $modulePasswordQuery->fetch();
 
-$configModel->saveConfig('web/cookie/cookie_httponly', "0", 'default', 0);
-
 $servletService->sendInitialPassword($row['value'], $password);
 
 $installer = $this;
@@ -30,8 +28,9 @@ $installer->run("
 
 	INSERT INTO `expressly_migrator_options` VALUES (1,'module_password','".$password."');
 	INSERT INTO `expressly_migrator_options` VALUES (2,'post_checkout_box','false');
-	INSERT INTO `expressly_migrator_options` VALUES (3,'redirect_to_checkout','true');
+	INSERT INTO `expressly_migrator_options` VALUES (3,'redirect_enabled','true');
     INSERT INTO `expressly_migrator_options` VALUES (4,'redirect_to_login','true');
+	INSERT INTO `expressly_migrator_options` VALUES (5,'redirect_destination','checkout/cart');
 ");
 $installer->endSetup();
 ?>

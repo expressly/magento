@@ -4,7 +4,7 @@ $config = new ExpresslyConfig();
 ?>
 <script>
 	var baseUrl = "<?php echo Mage::getUrl(); ?>";
-	var isRedirectToCheckoutEnabled = <?php echo $config->isRedirectToCheckout(); ?>;
+	var isRedirectEnabled = <?php echo $config->isRedirectEnabled(); ?>;
+	var redirectDestination = "<?php echo $config->getRedirectDestination(); ?>";
 	var isRedirectToLoginEnabled = <?php echo $config->isRedirectToLogin(); ?>;
-	var servletUrl = "<?php echo ExpresslyConfig::SERVLET_URL; ?>";
 </script>

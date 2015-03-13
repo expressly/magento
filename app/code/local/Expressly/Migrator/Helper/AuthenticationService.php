@@ -14,9 +14,9 @@ class AuthenticastionService {
 	 */
 	public function isAuthorizedRequest($request) {
 		$auth = $request->getHeader ( "Authorization" );
-		$authParts = explode ( " ", $auth );
+		$authParts = explode(" ", $auth);
 		
-		return $authParts [0] == "Basic" && $authParts [1] == $this->getAuthToken ();
+		return $authParts[0] == "Expressly" && $authParts[1] == base64_encode($this->getAuthToken());
 	}
 	
 	/**
