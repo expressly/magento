@@ -239,8 +239,20 @@ class Expressly_Migrator_IndexController extends Mage_Core_Controller_Front_Acti
     public function checkUserHasAnyOrderAction() {
         if($this->authService->isAuthorizedRequest($this->getRequest())) {
             $userEmail = $this->getRequest()->getParam('user_email');
+            $orders = $this->getOrders($userEmail);
+            $totalValue = 0;
             
-            echo $this->userHasOrders($userEmail) ? 1 : 0;
+            if(count($orders) > 0) {
+            	$firstOrder = null;
+            	foreach($orders as $order) {
+            		$firstOrder = $order;
+            		break;
+            	}
+            	
+            	$totalValue = $firstOrder->getGrandTotal();
+            }
+            
+            echo $totalValue;
         }
     }
 
@@ -310,14 +322,19 @@ class Expressly_Migrator_IndexController extends Mage_Core_Controller_Front_Acti
      * Checks if the user has any orders or not.
      */
     private function userHasOrders($userEmail) {
-        
-        $customer = Mage::getModel("customer/customer");
-        $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
-        $customer = $customer->loadByEmail($userEmail);
-        
-        $collection = Mage::getResourceModel("sales/order_collection")->addFieldToSelect('*')->addFieldToFilter('customer_id', $customer->getId());
-        
-        return count($collection) > 0;
+        return count($this->getOrders($userEmail)) > 0;
+    }
+    
+    /**
+     * Gets the orders of a user
+     * @param unknown $userEmail
+     */
+    private function getOrders($userEmail) {
+    	$customer = Mage::getModel("customer/customer");
+    	$customer->setWebsiteId(Mage::app()->getWebsite()->getId());
+    	$customer = $customer->loadByEmail($userEmail);
+    	
+    	return Mage::getResourceModel("sales/order_collection")->addFieldToSelect('*')->addFieldToFilter('customer_id', $customer->getId());
     }
     
     /**
