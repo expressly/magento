@@ -13,6 +13,29 @@ class Expressly_Migrator_IndexController extends Mage_Core_Controller_Front_Acti
 	private $servletService;
 	
 	/**
+	 * Gets all the e-mail addresses from the system.
+	 */
+	public function getAllEmailAddressesAction() {
+		if($this->authService->isAuthorizedRequest($this->getRequest())) {
+			$response = "";	
+			$collection = Mage::getModel('customer/customer')
+	                  ->getCollection()
+	                  ->addAttributeToSelect('*');
+			
+			foreach($collection as $user) {
+				if($response != "") {
+					$response .= "|";
+				}
+				
+				$response .= $user->getEmail();
+			}
+			$this->getResponse()->setBody($response);
+		} else {
+            $this->getResponse()->setHttpResponseCode(401);
+        }
+	}
+	
+	/**
 	 * Gets a customer name by it's e-mail address
 	 */
 	public function getUserNameAction() {
