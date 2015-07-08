@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Expressly_Expressly>
+            <version>0.1.0</version>
+        </Expressly_Expressly>
+    </modules>
+    <global>
+        <blocks>
+            <expressly>
+                <class>Expressly_Expressly_Block</class>
+            </expressly>
+        </blocks>
+        <helpers>
+            <expressly>
+                <class>Expressly_Expressly_Helper</class>
+            </expressly>
+        </helpers>
+    </global>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <expressly>
+                                            <title>Expressly Section</title>
+                                        </expressly>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+</config> 
