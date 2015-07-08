@@ -1,6 +1,5 @@
 *
 !.gitignore
 
-app/*
 !app/code/community/Expressly/
 !app/etc/modules/Expressly_Expressly.xml
