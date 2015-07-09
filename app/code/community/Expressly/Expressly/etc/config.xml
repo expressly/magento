@@ -5,6 +5,24 @@
             <version>0.1.0</version>
         </Expressly_Expressly>
     </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <expressly>
+                    <file>expressly.xml</file>
+                </expressly>
+            </updates>
+        </layout>
+        <routers>
+            <expressly>
+                <use>standard</use>
+                <args>
+                    <module>Expressly_Expressly</module>
+                    <frontName>expressly</frontName>
+                </args>
+            </expressly>
+        </routers>
+    </frontend>
     <global>
         <blocks>
             <expressly>
@@ -16,6 +34,45 @@
                 <class>Expressly_Expressly_Helper</class>
             </expressly>
         </helpers>
+        <rewrite>
+
+            <expressly_api_utility_ping>
+                <from><![CDATA[#^/expressly/api/ping/?$#]]></from>
+                <to><![CDATA[/expressly/utility/ping]]></to>
+                <complete>1</complete>
+            </expressly_api_utility_ping>
+
+            <expressly_api_batch_invoice>
+                <from><![CDATA[#^/expressly/api/batch/invoice/?$#]]></from>
+                <to><![CDATA[/expressly/batch/invoice]]></to>
+                <complete>1</complete>
+            </expressly_api_batch_invoice>
+
+            <expressly_api_batch_customer>
+                <from><![CDATA[#^/expressly/api/batch/customer/?$#]]></from>
+                <to><![CDATA[/expressly/batch/customer]]></to>
+                <complete>1</complete>
+            </expressly_api_batch_customer>
+
+            <expressly_api_customer_show>
+                <from><![CDATA[#^/expressly/api/user/([A-Za-z0-9_.+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)?\.[A-Za-z]+)/?$#]]></from>
+                <to><![CDATA[/expressly/customer/show/email/$1]]></to>
+                <complete>1</complete>
+            </expressly_api_customer_show>
+
+            <expressly_api_customer_migrate>
+                <from><![CDATA[#^/expressly/api/([A-Za-z0-9]+)/migrate/?$#]]></from>
+                <to><![CDATA[/expressly/customer/migrate/uuid/$1]]></to>
+                <complete>1</complete>
+            </expressly_api_customer_migrate>
+
+            <expressly_api_customer_popup>
+                <from><![CDATA[#^/expressly/api/([A-Za-z0-9]+)/?$#]]></from>
+                <to><![CDATA[/expressly/customer/popup/uuid/$1]]></to>
+                <complete>1</complete>
+            </expressly_api_customer_popup>
+
+        </rewrite>
     </global>
     <adminhtml>
         <acl>

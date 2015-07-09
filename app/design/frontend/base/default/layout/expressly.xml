@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout>
+    <cms_index_index>
+        <reference name="footer">
+            <block type="expressly/popup" name="expressly.popup" />
+        </reference>
+    </cms_index_index>
+</layout>

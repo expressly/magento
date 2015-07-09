@@ -1,5 +1,6 @@
 *
 !.gitignore
 
-!app/code/community/Expressly/
+!app/code/community/Expressly/Expressly/
+!app/design/frontend/base/default/layout/expressly.xml
 !app/etc/modules/Expressly_Expressly.xml
