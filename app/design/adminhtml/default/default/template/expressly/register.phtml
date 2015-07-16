@@ -1,0 +1,35 @@
+<button class="scalable" type="button" id="<?php echo $this->getHtmlId(); ?>">
+    <span id="register"><?php echo $this->escapeHtml($this->getButtonLabel()); ?></span>
+</button>
+
+<script>
+    (function() {
+        function hideElements() {
+            var ids = {
+                'image': 'row_expressly_expressly_general_expressly_image',
+                'terms': 'row_expressly_expressly_general_expressly_terms',
+                'policy': 'row_expressly_expressly_general_expressly_policy',
+                'password': 'row_expressly_expressly_general_expressly_password'
+            };
+
+            for (var id in ids) {
+                $(ids[id]).hide();
+            }
+        }
+
+        if (document.getElementById('expressly_expressly_general_expressly_password').value == '') {
+            hideElements();
+        }
+
+        document.getElementById('expressly_expressly_general_expressly_register').onclick = function(e) {
+            e.preventDefault();
+
+            configForm.submit();
+        };
+
+        document.querySelector('button.save').onclick = function() {
+            configForm.validator.form.querySelector('#expressly_expressly_general_expressly_password').remove();
+            configForm.submit();
+        };
+    })();
+</script>
