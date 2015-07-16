@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <layout>
-    <cms_index_index>
-        <reference name="footer">
-            <block type="expressly/popup" name="expressly.popup" />
+    <expressly_expressly_customercontroller_popup>
+        <reference name="head">
+            <action method="addJs">
+                <script>js/expressly.migrate.js</script>
+            </action>
         </reference>
-    </cms_index_index>
+    </expressly_expressly_customercontroller_popup>
 </layout>

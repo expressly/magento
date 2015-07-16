@@ -11,9 +11,9 @@ class Expressly_Expressly_Block_System_Config_Form_ImageUrl extends Mage_Adminht
         $extra = '';
 
         if ($element->getValue()) {
-            $extra = '<img style="max-height:100px;" src="' .$element->getValue().'" /><br />';
+            $extra = '<img style="max-height:100px;" src="' . $element->getValue() . '" /><br />';
         }
 
-        return $extra . parent::_getElementHtml($element) ;
+        return $extra . parent::_getElementHtml($element);
     }
 }
