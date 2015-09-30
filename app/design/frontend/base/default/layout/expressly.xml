@@ -7,4 +7,17 @@
             </action>
         </reference>
     </expressly_expressly_customercontroller_popup>
+
+    <checkout_multishipping_success>
+        <reference name="content">
+            <block type="expressly/banner" name="expressly_banner" template="expressly/banner.phtml" />
+        </reference>
+    </checkout_multishipping_success>
+
+    <checkout_onepage_success>
+        <reference name="content">
+            <block type="expressly/banner" name="expressly.banner" template="expressly/banner.phtml" />
+        </reference>
+    </checkout_onepage_success>
+
 </layout>
