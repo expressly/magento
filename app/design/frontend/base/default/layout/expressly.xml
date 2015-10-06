@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <layout>
+
     <expressly_expressly_customercontroller_popup>
         <reference name="head">
             <action method="addJs">
@@ -10,13 +11,13 @@
 
     <checkout_multishipping_success>
         <reference name="content">
-            <block type="expressly/banner" name="expressly_banner" template="expressly/banner.phtml" />
+            <block type="expressly/banner" name="expressly_banner" />
         </reference>
     </checkout_multishipping_success>
 
     <checkout_onepage_success>
         <reference name="content">
-            <block type="expressly/banner" name="expressly.banner" template="expressly/banner.phtml" />
+            <block type="expressly/banner" name="expressly.banner" />
         </reference>
     </checkout_onepage_success>
 
