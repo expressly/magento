@@ -29,4 +29,28 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
     {
         return $this->app;
     }
+
+    public static function errorFormatter($event)
+    {
+        $content = $event->getContent();
+        $message = array(
+            $content['description']
+        );
+        $addBulletpoints = function ($key, $title) use ($content, &$message) {
+            if (!empty($content[$key])) {
+                $message[] = '<br>';
+                $message[] = $title;
+                $message[] = '<ul>';
+                foreach ($content[$key] as $point) {
+                    $message[] = "<li>{$point}</li>";
+                }
+                $message[] = '</ul>';
+            }
+        };
+        // TODO: translatable
+        $addBulletpoints('causes', 'Possible causes:');
+        $addBulletpoints('actions', 'Possible resolutions:');
+
+        return implode('', $message);
+    }
 }
