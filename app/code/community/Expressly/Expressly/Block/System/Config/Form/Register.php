@@ -5,9 +5,6 @@ class Expressly_Expressly_Block_System_Config_Form_Register extends Mage_Adminht
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if (!$this->getTemplate()) {
-            $this->setTemplate('expressly/register.phtml');
-        }
 
         return $this;
     }

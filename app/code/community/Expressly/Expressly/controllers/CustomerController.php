@@ -4,6 +4,7 @@ use Expressly\Entity\Address;
 use Expressly\Entity\Customer;
 use Expressly\Entity\Email;
 use Expressly\Entity\Phone;
+use Expressly\Entity\Route;
 use Expressly\Event\CustomerMigrateEvent;
 use Expressly\Exception\ExceptionFormatter;
 use Expressly\Exception\GenericException;
@@ -15,68 +16,74 @@ class Expressly_Expressly_CustomerController extends AbstractController
     public function showAction()
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $emailAddress = $this->getRequest()->getParam('email');
-        $merchant = $this->app['merchant.provider']->getMerchant();
+        $route = $this->resolver->process($_SERVER['REQUEST_URI']);
 
-        try {
-            $mageCustomer = \Mage::getModel('customer/customer');
-            $mageCustomer->setWebsiteId(\Mage::app()->getWebsite()->getId());
-            $mageCustomer->loadByEmail($emailAddress);
+        if ($route instanceof Route) {
+            $emailAddress = $this->getRequest()->getParam('email');
+            $merchant = $this->app['merchant.provider']->getMerchant();
 
-            $reference = $mageCustomer->getId();
-            if ($reference) {
-                $customer = new Customer();
-                $customer
-                    ->setFirstName($mageCustomer->getFirstname())
-                    ->setLastName($mageCustomer->getLastname());
+            try {
+                $mageCustomer = \Mage::getModel('customer/customer');
+                $mageCustomer->setWebsiteId(\Mage::app()->getWebsite()->getId());
+                $mageCustomer->loadByEmail($emailAddress);
 
-                $email = new Email();
-                $email
-                    ->setAlias('default')
-                    ->setEmail($emailAddress);
-                $customer->addEmail($email);
+                $reference = $mageCustomer->getId();
+                if ($reference) {
+                    $customer = new Customer();
+                    $customer
+                        ->setFirstName($mageCustomer->getFirstname())
+                        ->setLastName($mageCustomer->getLastname());
 
-                $defaultBilling = $mageCustomer->getDefaultBilling();
-                $defaultShipping = $mageCustomer->getDefaultShipping();
-                foreach ($mageCustomer->getAddresses() as $mageAddress) {
-                    $address = new Address();
-                    $address
-                        ->setFirstName($mageAddress->getFirstname())
-                        ->setLastName($mageAddress->getLastname())
-                        ->setCompanyName($mageAddress->getCompany())
-                        ->setAddress1($mageAddress->getStreet1())
-                        ->setAddress2($mageAddress->getStreet2())
-                        ->setCity($mageAddress->getCity())
-                        ->setStateProvince($mageAddress->getRegionCode())
-                        ->setCountry($mageAddress->getCountry());
+                    $email = new Email();
+                    $email
+                        ->setAlias('default')
+                        ->setEmail($emailAddress);
+                    $customer->addEmail($email);
 
-                    $phone = new Phone();
-                    $phone
-                        ->setType(Phone::PHONE_TYPE_HOME)
-                        ->setNumber($mageAddress->getTelephone());
-                    $customer->addPhone($phone);
-                    $address->setPhonePosition($customer->getPhoneIndex($phone));
+                    $defaultBilling = $mageCustomer->getDefaultBilling();
+                    $defaultShipping = $mageCustomer->getDefaultShipping();
+                    foreach ($mageCustomer->getAddresses() as $mageAddress) {
+                        $address = new Address();
+                        $address
+                            ->setFirstName($mageAddress->getFirstname())
+                            ->setLastName($mageAddress->getLastname())
+                            ->setCompanyName($mageAddress->getCompany())
+                            ->setAddress1($mageAddress->getStreet1())
+                            ->setAddress2($mageAddress->getStreet2())
+                            ->setCity($mageAddress->getCity())
+                            ->setStateProvince($mageAddress->getRegionCode())
+                            ->setCountry($mageAddress->getCountry());
 
-                    $primary = false;
-                    $type = null;
-                    if ($mageAddress->getId() == $defaultBilling) {
-                        $primary = true;
-                        $type = Address::ADDRESS_BILLING;
-                    }
-                    if ($mageAddress->getId() == $defaultShipping) {
-                        $primary = true;
-                        $type = ($type == Address::ADDRESS_BILLING) ? Address::ADDRESS_BOTH : Address::ADDRESS_SHIPPING;
-                    }
+                        $phone = new Phone();
+                        $phone
+                            ->setType(Phone::PHONE_TYPE_HOME)
+                            ->setNumber($mageAddress->getTelephone());
+                        $customer->addPhone($phone);
+                        $address->setPhonePosition($customer->getPhoneIndex($phone));
 
-                    $customer->addAddress($address, $primary, $type);
-                };
+                        $primary = false;
+                        $type = null;
+                        if ($mageAddress->getId() == $defaultBilling) {
+                            $primary = true;
+                            $type = Address::ADDRESS_BILLING;
+                        }
+                        if ($mageAddress->getId() == $defaultShipping) {
+                            $primary = true;
+                            $type = ($type == Address::ADDRESS_BILLING) ? Address::ADDRESS_BOTH : Address::ADDRESS_SHIPPING;
+                        }
 
-                $presenter = new CustomerMigratePresenter($merchant, $customer, $emailAddress, $reference);
-                $this->getResponse()->setBody(json_encode($presenter->toArray()));
+                        $customer->addAddress($address, $primary, $type);
+                    };
+
+                    $presenter = new CustomerMigratePresenter($merchant, $customer, $emailAddress, $reference);
+                    $this->getResponse()->setBody(json_encode($presenter->toArray()));
+                }
+            } catch (\Exception $e) {
+                $this->logger->error(ExceptionFormatter::format($e));
+                $this->getResponse()->setBody(json_encode(array()));
             }
-        } catch (\Exception $e) {
-            $this->logger->error(ExceptionFormatter::format($e));
-            $this->getResponse()->setBody(json_encode(array()));
+        } else {
+            $this->getResponse()->setHttpResponseCode(401);
         }
     }
 

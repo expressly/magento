@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Expressly_Expressly>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Expressly_Expressly>
     </modules>
     <frontend>
@@ -73,6 +73,12 @@
                 <complete>1</complete>
             </expressly_api_utility_ping>
 
+            <expressly_api_utility_registered>
+                <from><![CDATA[#^/expressly/api/registered/?$#]]></from>
+                <to><![CDATA[/expressly/utility/registered]]></to>
+                <complete>1</complete>
+            </expressly_api_utility_registered>
+
             <expressly_api_batch_invoice>
                 <from><![CDATA[#^/expressly/api/batch/invoice/?$#]]></from>
                 <to><![CDATA[/expressly/batch/invoice]]></to>
@@ -86,19 +92,19 @@
             </expressly_api_batch_customer>
 
             <expressly_api_customer_show>
-                <from><![CDATA[#^/expressly/api/user/([A-Za-z0-9_.\-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)?\.[A-Za-z]+)/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/user/([0-9a-zA-Z\-\_]+\@[0-9a-zA-Z\-\_\.]+)\/?$#]]></from>
                 <to><![CDATA[/expressly/customer/show/email/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_show>
 
             <expressly_api_customer_migrate>
-                <from><![CDATA[#^/expressly/api/([A-Za-z0-9\-]+)/migrate/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/migrate/?$#]]></from>
                 <to><![CDATA[/expressly/customer/migrate/uuid/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_migrate>
 
             <expressly_api_customer_popup>
-                <from><![CDATA[#^/expressly/api/([A-Za-z0-9\-]+)/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$#]]></from>
                 <to><![CDATA[/expressly/customer/popup/uuid/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_popup>
@@ -107,7 +113,7 @@
     <adminhtml>
         <acl>
             <resources>
-                <admin>
+                <admin>x
                     <children>
                         <system>
                             <children>

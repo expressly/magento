@@ -21,8 +21,6 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
         });
 
         $this->app = $app;
-        $this->dispatcher = $app['dispatcher'];
-        $this->logger = $app['logger'];
     }
 
     public function getApp()

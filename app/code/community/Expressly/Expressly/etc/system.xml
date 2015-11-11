@@ -18,58 +18,23 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <expressly_image transtale="label">
-                            <label>Image URL</label>
-                            <comment>URL for the Logo of your store.</comment>
-                            <frontend_model>expressly/system_config_form_imageUrl</frontend_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </expressly_image>
-
-                        <expressly_terms transtale="label">
-                            <label>Terms URL</label>
-                            <comment>Terms and Conditions URL for your store.</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </expressly_terms>
-
-                        <expressly_policy transtale="label">
-                            <label>Privacy Policy URL</label>
-                            <comment>Privacy Policy URL for your store.</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </expressly_policy>
-
-                        <expressly_password transtale="label">
-                            <label>Password</label>
-                            <comment>Password for your store. If your password field is blank, please press Save changes to register, and retrieve your password.</comment>
+                        <expressly_apikey transtale="label">
+                            <label>API Key</label>
+                            <comment>
+                                API Key provided from our
+                                &lt;a href="https://buyexpressly.com/#/install#api"&gt;portal&lt;/a&gt;.
+                                If you do not have an API Key, please follow the previous link for instructions on how
+                                to create one.
+                            </comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </expressly_password>
-
-                        <expressly_register translate="button_label">
-                            <label></label>
-                            <button_label>Register</button_label>
-                            <frontend_model>expressly/system_config_form_register</frontend_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </expressly_register>
-                   </fields>
-               </expressly_general>
-           </groups>
+                        </expressly_apikey>
+                    </fields>
+                </expressly_general>
+            </groups>
         </expressly>
     </sections>
 </config>

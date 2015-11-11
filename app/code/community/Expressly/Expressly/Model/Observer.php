@@ -4,6 +4,8 @@ use Expressly\Event\MerchantEvent;
 use Expressly\Event\PasswordedEvent;
 use Expressly\Exception\ExceptionFormatter;
 use Expressly\Exception\GenericException;
+use Expressly\Exception\InvalidAPIKeyException;
+use Expressly\Subscriber\MerchantSubscriber;
 
 class Expressly_Expressly_Model_Observer extends Varien_Event_Observer
 {
@@ -18,36 +20,24 @@ class Expressly_Expressly_Model_Observer extends Varien_Event_Observer
         $app = $helper->getApp();
         $provider = $app['merchant.provider'];
         $dispatcher = $app['dispatcher'];
-        // get uuid
+
         $merchant = $provider->getMerchant();
-        $uuid = $merchant->getUuid();
-        $password = $merchant->getPassword();
         $event = new PasswordedEvent($merchant);
 
         try {
-            if (empty($uuid) && empty($password)) {
-                $event = new MerchantEvent($merchant);
-                $dispatcher->dispatch('merchant.register', $event);
-            } else {
-                $dispatcher->dispatch('merchant.update', $event);
-            }
+            $provider->setMerchant($merchant);
+            $dispatcher->dispatch(MerchantSubscriber::MERCHANT_REGISTER, $event);
 
-            $content = $event->getContent();
             if (!$event->isSuccessful()) {
-                throw new GenericException($content);
-            }
-
-            if (empty($uuid) && empty($password)) {
-                $merchant
-                    ->setUuid($content['merchantUuid'])
-                    ->setPassword($content['secretKey']);
-
-                $provider->setMerchant($merchant);
+                throw new InvalidAPIKeyException();
             }
         } catch (\Exception $e) {
             $app['logger']->error(ExceptionFormatter::format($e));
 
-            $response = array('error' => -1, 'message' => $helper->__('Your values could not be transmitted to the server. Please try resubmitting, or contacting info@buyexpressly.com'));
+            $response = array(
+                'error' => -1,
+                'message' => $helper->__('Your values could not be transmitted to the server. Please try resubmitting, or contacting info@buyexpressly.com')
+            );
             \Mage::app()->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
         }
     }

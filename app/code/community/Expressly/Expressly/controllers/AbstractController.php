@@ -17,6 +17,7 @@ abstract class AbstractController extends \Mage_Core_Controller_Front_Action
     ) {
         $helper = new \Expressly_Expressly_Helper_Client();
         $this->app = $helper->getApp();
+        $this->resolver = $this->app['route.resolver'];
         $this->dispatcher = $this->app['dispatcher'];
         $this->logger = $this->app['logger'];
 
