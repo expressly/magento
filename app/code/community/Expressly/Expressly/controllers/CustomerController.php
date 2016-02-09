@@ -194,7 +194,6 @@ class Expressly_Expressly_CustomerController extends AbstractController
                     ->save();
             }
 
-
             $this->dispatcher->dispatch('customer.migrate.success', $event);
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
