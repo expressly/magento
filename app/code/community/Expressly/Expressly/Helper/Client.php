@@ -23,11 +23,6 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
         $this->app = $app;
     }
 
-    public function getApp()
-    {
-        return $this->app;
-    }
-
     public static function errorFormatter($event)
     {
         $content = $event->getContent();
@@ -50,5 +45,25 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
         $addBulletpoints('actions', 'Possible resolutions:');
 
         return implode('', $message);
+    }
+
+    public function getApp()
+    {
+        return $this->app;
+    }
+
+    public function getLogger()
+    {
+        return $this->app['logger'];
+    }
+
+    public function getDispatcher()
+    {
+        return $this->app['dispatcher'];
+    }
+
+    public function getMerchant()
+    {
+        return $this->app['merchant.provider']->getMerchant();
     }
 }
