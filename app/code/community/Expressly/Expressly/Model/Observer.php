@@ -17,22 +17,20 @@ class Expressly_Expressly_Model_Observer extends Varien_Event_Observer
     public function registerUpdateMerchant($observer)
     {
         $helper = new Expressly_Expressly_Helper_Client();
-        $app = $helper->getApp();
-        $provider = $app['merchant.provider'];
-        $dispatcher = $app['dispatcher'];
+        $provider = $helper->getMerchantProvider();
 
         $merchant = $provider->getMerchant();
         $event = new PasswordedEvent($merchant);
 
         try {
             $provider->setMerchant($merchant);
-            $dispatcher->dispatch(MerchantSubscriber::MERCHANT_REGISTER, $event);
+            $helper->getDispatcher()->dispatch(MerchantSubscriber::MERCHANT_REGISTER, $event);
 
             if (!$event->isSuccessful()) {
                 throw new InvalidAPIKeyException();
             }
         } catch (\Exception $e) {
-            $app['logger']->error(ExceptionFormatter::format($e));
+            $helper->getLogger()->error(ExceptionFormatter::format($e));
 
             $response = array(
                 'error' => -1,

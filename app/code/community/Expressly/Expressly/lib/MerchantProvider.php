@@ -4,7 +4,7 @@ namespace Expressly\Expressly;
 
 use Expressly\Entity\Merchant;
 use Expressly\Provider\MerchantProviderInterface;
-use Silex\Application;
+use Pimple\Container;
 
 class MerchantProvider implements MerchantProviderInterface
 {
@@ -15,7 +15,7 @@ class MerchantProvider implements MerchantProviderInterface
     const PATH = 'expressly/expressly_general/expressly_path';
     const HOST = 'expressly/expressly_general/expressly_host';
 
-    public function __construct(Application $app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
 

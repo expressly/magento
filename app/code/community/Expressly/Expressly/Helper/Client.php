@@ -16,9 +16,9 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
         $client = new Client(MerchantType::MAGENTO);
         $app = $client->getApp();
 
-        $app['merchant.provider'] = $app->share(function () use ($app) {
+        $app['merchant.provider'] = function () use ($app) {
             return new MerchantProvider($app);
-        });
+        };
 
         $this->app = $app;
     }
@@ -64,6 +64,11 @@ class Expressly_Expressly_Helper_Client extends Mage_Core_Helper_Abstract
 
     public function getMerchant()
     {
-        return $this->app['merchant.provider']->getMerchant();
+        return $this->getMerchantProvider()->getMerchant();
+    }
+
+    public function getMerchantProvider()
+    {
+        return $this->app['merchant.provider'];
     }
 }
