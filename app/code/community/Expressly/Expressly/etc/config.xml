@@ -92,19 +92,19 @@
             </expressly_api_batch_customer>
 
             <expressly_api_customer_show>
-                <from><![CDATA[#^/expressly/api/user/([0-9a-zA-Z\-\_]+\@[0-9a-zA-Z\-\_\.]+)\/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/user/([0-9a-zA-Z-_+]+@[0-9a-zA-Z-_.]+)/?$#]]></from>
                 <to><![CDATA[/expressly/customer/show/email/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_show>
 
             <expressly_api_customer_migrate>
-                <from><![CDATA[#^/expressly/api/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/migrate/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/([0-9a-f-]+)/migrate/?$#]]></from>
                 <to><![CDATA[/expressly/customer/migrate/uuid/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_migrate>
 
             <expressly_api_customer_popup>
-                <from><![CDATA[#^/expressly/api/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/([0-9a-f-]+)/?$#]]></from>
                 <to><![CDATA[/expressly/customer/popup/uuid/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_popup>

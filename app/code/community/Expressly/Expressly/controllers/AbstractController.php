@@ -9,6 +9,7 @@ abstract class AbstractController extends \Mage_Core_Controller_Front_Action
     protected $app;
     protected $dispatcher;
     protected $logger;
+    protected $merchantProvider;
 
     public function __construct(
         \Zend_Controller_Request_Abstract $request,
@@ -17,6 +18,7 @@ abstract class AbstractController extends \Mage_Core_Controller_Front_Action
     ) {
         $helper = new \Expressly_Expressly_Helper_Client();
         $this->app = $helper->getApp();
+        $this->merchantProvider = $this->app['merchant.provider'];
         $this->resolver = $this->app['route.resolver'];
         $this->dispatcher = $this->app['dispatcher'];
         $this->logger = $this->app['logger'];

@@ -6,10 +6,12 @@ use Expressly\Entity\Email;
 use Expressly\Entity\Phone;
 use Expressly\Entity\Route;
 use Expressly\Event\CustomerMigrateEvent;
+use Expressly\Event\MerchantEvent;
 use Expressly\Exception\ExceptionFormatter;
 use Expressly\Exception\GenericException;
 use Expressly\Expressly\AbstractController;
 use Expressly\Presenter\CustomerMigratePresenter;
+use Expressly\Subscriber\CustomerMigrationSubscriber;
 
 class Expressly_Expressly_CustomerController extends AbstractController
 {
@@ -222,11 +224,11 @@ class Expressly_Expressly_CustomerController extends AbstractController
     public function popupAction()
     {
         $uuid = $this->getRequest()->getParam('uuid');
-        $merchant = $this->app['merchant.provider']->getMerchant();
+        $merchant = $this->merchantProvider->getMerchant();
         $event = new CustomerMigrateEvent($merchant, $uuid);
 
         try {
-            $this->dispatcher->dispatch('customer.migrate.popup', $event);
+            $this->dispatcher->dispatch(CustomerMigrationSubscriber::CUSTOMER_MIGRATE_POPUP, $event);
 
             if (!$event->isSuccessful()) {
                 throw new GenericException($this->processError($event));
