@@ -1,0 +1,26 @@
+{
+    "name": "expressly/magento",
+    "description": "Expressly Magento 1.5-1.9 Module",
+    "type": "module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Pratt",
+            "email": "sam@buyexpressly.com"
+        }
+    ],
+    "require": {
+        "expressly/php-common": "2.3.4"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/expressly/php-common"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Expressly\\Expressly\\": "lib/"
+        }
+    }
+}
