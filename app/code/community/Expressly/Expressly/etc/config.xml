@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Expressly_Expressly>
-            <version>0.4.2</version>
+            <version>2.3.0</version>
         </Expressly_Expressly>
     </modules>
     <frontend>

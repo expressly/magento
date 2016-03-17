@@ -78,7 +78,8 @@ class Expressly_Expressly_BatchController extends AbstractController
         if ($route instanceof Route) {
             $json = file_get_contents('php://input');
             $json = json_decode($json);
-            $customers = array();
+            $existing = array();
+            $pending = array();
 
             try {
                 if (!property_exists($json, 'emails')) {
@@ -93,18 +94,18 @@ class Expressly_Expressly_BatchController extends AbstractController
 
                     if ($customerModel->getId()) {
                         if ($customerModel->getData('is_active')) {
-                            $customers['existing'][] = $email;
+                            $existing[] = $email;
                             continue;
                         }
 
-                        $customers['pending'][] = $email;
+                        $pending[] = $email;
                     }
                 }
             } catch (\Exception $e) {
                 $this->logger->error(ExceptionFormatter::format($e));
             }
 
-            $presenter = new BatchCustomerPresenter($customers);
+            $presenter = new BatchCustomerPresenter($existing, array(), $pending);
             $this->getResponse()->setBody(json_encode($presenter->toArray()));
         } else {
             $this->getResponse()->setHttpResponseCode(401);

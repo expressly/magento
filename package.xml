@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Expressly</name>
-    <version>0.5.0</version>
+    <version>2.3.0</version>
     <stability>stable</stability>
     <license>MITL</license>
     <channel>community</channel>
@@ -16,7 +16,7 @@ Expressly also provides an opportunity for merchants to monetise their own user 
 Expressly integrates with shopping cart software with this extension and allows for a smooth customer experience, while ensuring tracking of important metrics and performance for shops.&#xD;
         &#xD;
 Full instructions and registration at www.buyexpressly.com.</description>
-    <notes>https://github.com/expressly/magento/releases/tag/0.5.0</notes>
+    <notes>https://github.com/expressly/magento/releases/tag/2.3.0</notes>
     <authors><author><name>Expressly</name><user>Expressly</user><email>info@expressly.com</email></author></authors>
     <date>2016-03-02</date>
     <time>19:57:55</time>

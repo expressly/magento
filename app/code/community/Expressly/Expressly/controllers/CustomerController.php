@@ -54,6 +54,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
                             ->setAddress2($mageAddress->getStreet2())
                             ->setCity($mageAddress->getCity())
                             ->setStateProvince($mageAddress->getRegionCode())
+                            ->setZip($mageAddress->getPostcode())
                             ->setCountry($mageAddress->getCountry());
 
                         $phone = new Phone();
@@ -235,38 +236,6 @@ class Expressly_Expressly_CustomerController extends AbstractController
             }
 
             $this->mimicFrontPage();
-            // XML injection doesn't work to add this javascript as we're overriding the page completely
-            $js = '<script type="text/javascript">
-                    (function() {
-                        popupContinue = function (event) {
-                            event.style.display = \'none\';
-                            var loader = event.nextElementSibling;
-                            loader.style.display = \'block\';
-                            loader.nextElementSibling.style.display = \'none\';
-
-                            window.location.replace(window.location.origin + window.location.pathname + \'/migrate\');
-                        };
-
-                        popupClose = function (event) {
-                            window.location.replace(window.location.origin);
-                        };
-
-                        openTerms = function (event) {
-                            window.open(event.href, \'_blank\');
-                        };
-
-                        openPrivacy = function (event) {
-                            window.open(event.href, \'_blank\');
-                        };
-
-                        (function () {
-                            // make sure our popup is on top or hierarchy
-                            content = document.getElementById(\'xly\');
-                            document.body.insertBefore(content, document.body.children[0]);
-                        })();
-                    })();
-                </script>';
-            $this->getResponse()->appendBody($js);
             $this->getResponse()->appendBody($event->getContent());
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
