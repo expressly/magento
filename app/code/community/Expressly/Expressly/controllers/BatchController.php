@@ -14,7 +14,7 @@ class Expressly_Expressly_BatchController extends AbstractController
     public function invoiceAction()
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $route = $this->resolver->process($_SERVER['REQUEST_URI']);
+        $route = $this->resolver->process(preg_replace('/.*(expressly\/.*)/i', '/${1}', $_SERVER['REQUEST_URI']));
 
         if ($route instanceof Route) {
 
@@ -73,7 +73,7 @@ class Expressly_Expressly_BatchController extends AbstractController
     public function customerAction()
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $route = $this->resolver->process($_SERVER['REQUEST_URI']);
+        $route = $this->resolver->process(preg_replace('/.*(expressly\/.*)/i', '/${1}', $_SERVER['REQUEST_URI']));
 
         if ($route instanceof Route) {
             $json = file_get_contents('php://input');

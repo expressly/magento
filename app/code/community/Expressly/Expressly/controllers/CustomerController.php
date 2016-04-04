@@ -18,7 +18,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
     public function showAction()
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $route = $this->resolver->process($_SERVER['REQUEST_URI']);
+        $route = $this->resolver->process(preg_replace('/.*(expressly\/.*)/i', '/${1}', $_SERVER['REQUEST_URI']));
 
         if ($route instanceof Route) {
             $emailAddress = $this->getRequest()->getParam('email');

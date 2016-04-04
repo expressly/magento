@@ -17,7 +17,7 @@ class Expressly_Expressly_UtilityController extends AbstractController
     public function registeredAction()
     {
         $this->getResponse()->setHeader('Content-Type', 'application/json');
-        $route = $this->resolver->process($_SERVER['REQUEST_URI']);
+        $route = $this->resolver->process(preg_replace('/.*(expressly\/.*)/i', '/${1}', $_SERVER['REQUEST_URI']));
 
         if ($route instanceof Route) {
             $presenter = new RegisteredPresenter();
