@@ -9,26 +9,31 @@ class Expressly_Expressly_Block_Banner extends Mage_Core_Block_Template
 {
     protected function _toHtml()
     {
-        $helper = new Expressly_Expressly_Helper_Client();
-
-        $merchant = $helper->getMerchant();
-        $email = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
-
-        $event = new BannerEvent($merchant, $email);
-
         try {
-            $helper->getDispatcher()->dispatch(BannerSubscriber::BANNER_REQUEST, $event);
+            $helper = new Expressly_Expressly_Helper_Client();
 
-            if (!$event->isSuccessful()) {
-                throw new GenericException(Expressly_Expressly_Helper_Client::errorFormatter($event));
+            $merchant = $helper->getMerchant();
+            $email = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
+
+            $event = new BannerEvent($merchant, $email);
+
+            try {
+                $helper->getDispatcher()->dispatch(BannerSubscriber::BANNER_REQUEST, $event);
+
+                if (!$event->isSuccessful()) {
+                    throw new GenericException(Expressly_Expressly_Helper_Client::errorFormatter($event));
+                }
+
+            } catch (GenericException $e) {
+                $helper->getLogger()->error($e);
+
+                return '';
             }
 
-        } catch (GenericException $e) {
-            $helper->getLogger()->error($e);
-
+            return BannerHelper::toHtml($event);
+        } catch (Exception $ignore) {
+            // never break the shop
             return '';
         }
-
-        return BannerHelper::toHtml($event);
     }
 }
