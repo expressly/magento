@@ -1,4 +1,8 @@
+*.iml
 .DS_Store
 vendor
 composer.lock
 .idea
+.buildpath
+.project
+.settings
