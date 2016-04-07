@@ -13,7 +13,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # make a target dir so we can have a clean distribution
 echo "[Copying extension files to target]"
-mkdir ${DIR}/target
+mkdir -p ${DIR}/target
 rsync -a --exclude='build' --exclude='target' --exclude='.*' --exclude='*.sh' --exclude='*.iml'  ${DIR}/* ${DIR}/target
 
 # install dependencies
@@ -26,7 +26,7 @@ popd
 
 # build the distribution
 echo "[Packaging extension]"
-php ${DIR}/build/pack.php target $1
+php ${DIR}/build/pack.php ${DIR}/target $1
 
 # TODO: repackage for long file names issue on Magento 1.7
 
