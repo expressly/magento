@@ -87,9 +87,9 @@ class Expressly_Expressly_BatchController extends AbstractController
                 }
 
                 $customerModel = Mage::getModel('customer/customer');
-                $customerModel->setWebsiteId(Mage::app()->getWebsite()->getId());
 
                 foreach ($json->emails as $email) {
+                    $customerModel->setWebsiteId(Mage::app()->getWebsite()->getId());
                     $customerModel->loadByEmail($email);
 
                     if ($customerModel->getId()) {
