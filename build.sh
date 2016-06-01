@@ -14,7 +14,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # make a target dir so we can have a clean distribution
 echo "[Copying extension files to target]"
 mkdir -p ${DIR}/target
-rsync -a --exclude='build' --exclude='target' --exclude='.*' --exclude='*.sh' --exclude='*.iml'  ${DIR}/* ${DIR}/target
+rsync -a  ${DIR}/package.xml ${DIR}/LICENSE ${DIR}/app ${DIR}/target
 
 # install dependencies
 echo "[Installing dependencies]"

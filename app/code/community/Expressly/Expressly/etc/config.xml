@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Expressly_Expressly>
-            <version>2.3.5</version>
+            <version>2.3.12</version>
         </Expressly_Expressly>
     </modules>
     <frontend>
@@ -92,7 +92,7 @@
             </expressly_api_batch_customer>
 
             <expressly_api_customer_show>
-                <from><![CDATA[#^/expressly/api/user/([0-9a-zA-Z-_+]+@[0-9a-zA-Z-_.]+)/?$#]]></from>
+                <from><![CDATA[#^/expressly/api/user/([^\s]+@[^\s/]++)/?$#]]></from>
                 <to><![CDATA[/expressly/customer/show/email/$1]]></to>
                 <complete>1</complete>
             </expressly_api_customer_show>

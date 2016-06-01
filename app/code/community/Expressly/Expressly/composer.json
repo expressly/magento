@@ -1,6 +1,6 @@
 {
     "name": "expressly/magento",
-    "description": "Expressly Magento 1.5-1.9 Module",
+    "description": "Expressly Magento 1.7-1.9 Module",
     "type": "module",
     "license": "MIT",
     "authors": [
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "expressly/php-common": "2.3.5"
+        "expressly/php-common": "2.3.12"
     },
     "repositories": [
         {
