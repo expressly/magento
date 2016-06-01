@@ -13,20 +13,36 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # make a target dir so we can have a clean distribution
 echo "[Copying extension files to target]"
-mkdir -p ${DIR}/target
-rsync -a  ${DIR}/package.xml ${DIR}/LICENSE ${DIR}/app ${DIR}/target
+mkdir -p ${DIR}/out/src
+rsync -a  ${DIR}/LICENSE ${DIR}/app ${DIR}/out/src
 
 # install dependencies
 echo "[Installing dependencies]"
-pushd "${DIR}/target/app/code/community/Expressly/Expressly"
+pushd "${DIR}/out/src/app/code/community/Expressly/Expressly"
 composer install --no-dev
 popd
 
-# TODO: rebuild package.xml also replace version with tag in all the required files
+# remove unnecessary files
+VENDOR_DIR=${DIR}/out/src/app/code/community/Expressly/Expressly/vendor
+rm -rf ${VENDOR_DIR}/doctrine/collections/tests
+rm -rf ${VENDOR_DIR}/expressly/php-common/docs
+rm -rf ${VENDOR_DIR}/expressly/php-common/tests
+rm -rf ${VENDOR_DIR}/kriswallsmith/buzz/test
+rm -rf ${VENDOR_DIR}/monolog/monolog/doc
+rm -rf ${VENDOR_DIR}/monolog/monolog/tests
+rm -rf ${VENDOR_DIR}/pimple/pimple/ext/pimple/tests
+rm -rf ${VENDOR_DIR}/predis/predis/examples
+rm -rf ${VENDOR_DIR}/symfony/config/Symfony/Component/Config/Tests
+rm -rf ${VENDOR_DIR}/symfony/debug/Symfony/Component/Debug/Tests
+rm -rf ${VENDOR_DIR}/symfony/event-dispatcher/Symfony/Component/EventDispatcher/Tests
+rm -rf ${VENDOR_DIR}/symfony/filesystem/Tests
+rm -rf ${VENDOR_DIR}/symfony/http-foundation/Symfony/Component/HttpFoundation/Tests
+rm -rf ${VENDOR_DIR}/symfony/http-kernel/Symfony/Component/HttpKernel/Tests
+rm -rf ${VENDOR_DIR}/symfony/monolog-bridge/Symfony/Bridge/Monolog/Tests
+rm -rf ${VENDOR_DIR}/symfony/yaml/Symfony/Component/Yaml/Tests
 
 # build the distribution
 echo "[Packaging extension]"
-php ${DIR}/build/pack.php ${DIR}/target $1
-
-# TODO: repackage for long file names issue on Magento 1.7
-
+mkdir -p ${DIR}/out/staging
+tar -cf ${DIR}/out/staging/Expressly-Staging.tar -C ${DIR}/out/src .
+php ${DIR}/build/magento-tar-to-connect.php ${DIR}/build/expressly-extension-config.php

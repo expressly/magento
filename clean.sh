@@ -11,5 +11,5 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-echo "[Cleaning target]"
-rm -rf ${DIR}/target
+echo "[Cleaning output]"
+rm -rf ${DIR}/out

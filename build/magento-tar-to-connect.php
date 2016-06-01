@@ -13,11 +13,11 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 date_default_timezone_set('America/Los_Angeles');
 
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Helper/File.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Interface.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Abstract.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Tar.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Exception.php';
+require_once 'magento-tar-to-connect/Archive/Helper/File.php';
+require_once 'magento-tar-to-connect/Archive/Interface.php';
+require_once 'magento-tar-to-connect/Archive/Abstract.php';
+require_once 'magento-tar-to-connect/Archive/Tar.php';
+require_once 'magento-tar-to-connect/Exception.php';
 
 /**
 * Still a lot of Magento users stuck on systems with 5.2, no no namespaces
