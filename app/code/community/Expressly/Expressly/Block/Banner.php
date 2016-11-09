@@ -10,11 +10,14 @@ class Expressly_Expressly_Block_Banner extends Mage_Core_Block_Template
     protected function _toHtml()
     {
         try {
-            $helper = new Expressly_Expressly_Helper_Client();
-
-            $merchant = $helper->getMerchant();
             $email = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
 
+            if (!$email) {
+                return '';
+            }
+
+            $helper = new Expressly_Expressly_Helper_Client();
+            $merchant = $helper->getMerchant();
             $event = new BannerEvent($merchant, $email);
 
             try {
