@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <layout>
 
-    <expressly_expressly_customercontroller_popup>
-        <reference name="head">
-            <action method="addJs">
-                <script>js/expressly.migrate.js</script>
-            </action>
-        </reference>
-    </expressly_expressly_customercontroller_popup>
+    <!--<expressly_expressly_customercontroller_popup>-->
+        <!--<reference name="head">-->
+            <!--<action method="addJs">-->
+                <!--<script>js/expressly.migrate.js</script>-->
+            <!--</action>-->
+        <!--</reference>-->
+    <!--</expressly_expressly_customercontroller_popup>-->
 
     <checkout_multishipping_success>
         <reference name="content">
