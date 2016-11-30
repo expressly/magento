@@ -34,6 +34,9 @@ class Expressly_Expressly_BatchController extends AbstractController
                         continue;
                     }
 
+                    $from = \DateTime::createFromFormat('Y-m-d', $customer->from, new \DateTimeZone('UTC'));
+                    $to = \DateTime::createFromFormat('Y-m-d', $customer->to, new \DateTimeZone('UTC'));
+
                     $mageOrders = $orderModel
                         ->getCollection()
                         ->addFieldToFilter('customer_email', $customer->email)
@@ -42,19 +45,23 @@ class Expressly_Expressly_BatchController extends AbstractController
                     $invoice = new Invoice();
                     $invoice->setEmail($customer->email);
                     foreach ($mageOrders as $mageOrder) {
-                        $total = $mageOrder->getData('base_grand_total');
-                        $tax = $mageOrder->getData('base_tax_amount');
+                        $orderDate = new \DateTime($mageOrder->getData('created_at'), new \DateTimeZone('UTC'));
+                        $orderDate = \DateTime::createFromFormat('Y-m-d', $orderDate->format('Y-m-d'), new \DateTimeZone('UTC'));
+                        if ($orderDate >= $from && $orderDate < $to) {
+                            $total = $mageOrder->getData('base_grand_total');
+                            $tax = $mageOrder->getData('base_tax_amount');
 
-                        $order = new Order();
-                        $order
-                            ->setId($mageOrder->getData('increment_id'))
-                            ->setDate(new \DateTime($mageOrder->getData('created_at')))
-                            ->setCurrency($mageOrder->getData('base_currency_code'))
-                            ->setTotal((double)$total - (double)$tax, (double)$tax)
-                            ->setItemCount((int)$mageOrder->getData('total_qty_ordered'))
-                            ->setCoupon($mageOrder->getData('coupon_code'));
+                            $order = new Order();
+                            $order
+                                ->setId($mageOrder->getData('increment_id'))
+                                ->setDate(new \DateTime($mageOrder->getData('created_at')))
+                                ->setCurrency($mageOrder->getData('base_currency_code'))
+                                ->setTotal((double)$total - (double)$tax, (double)$tax)
+                                ->setItemCount((int)$mageOrder->getData('total_qty_ordered'))
+                                ->setCoupon($mageOrder->getData('coupon_code'));
 
-                        $invoice->addOrder($order);
+                            $invoice->addOrder($order);
+                        }
                     }
 
                     $invoices[] = $invoice;

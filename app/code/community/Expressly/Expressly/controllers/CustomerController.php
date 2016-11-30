@@ -94,6 +94,8 @@ class Expressly_Expressly_CustomerController extends AbstractController
 
                     $presenter = new CustomerMigratePresenter($merchant, $customer, $emailAddress, $reference);
                     $this->getResponse()->setBody(json_encode($presenter->toArray()));
+                } else {
+                    $this->getResponse()->setHttpResponseCode(404);
                 }
             } catch (\Exception $e) {
                 $this->logger->error(ExceptionFormatter::format($e));
@@ -223,13 +225,14 @@ class Expressly_Expressly_CustomerController extends AbstractController
                     ->save();
             }
 
-            $this->dispatcher->dispatch('customer.migrate.success', $event);
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/success');
+            return;
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
         }
 
         if (!$exists) {
-            $this->getResponse()->setRedirect(Mage::getBaseUrl());
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed');
         } else {
             $this->mimicFrontPage();
 
@@ -238,7 +241,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
                     setTimeout(function() {
                         var login = confirm("Your email address has already been registered on this store. Please login with your credentials. Pressing OK will redirect you to the login page.");
                         if (login) {
-                            window.location.replace(window.location.origin + "/customer/account/login");
+                            window.location.replace("' . Mage::getUrl('customer/account/login') . '");
                         }
                     }, 500);
                 })();
@@ -266,7 +269,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
 
-            $this->getResponse()->setRedirect(Mage::getBaseUrl());
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed');
         }
     }
 
