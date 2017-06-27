@@ -110,6 +110,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
     {
         $uuid = $this->getRequest()->getParam('uuid');
         $exists = false;
+        $xlyerror = '';
 
         try {
             $merchant = $this->app['merchant.provider']->getMerchant();
@@ -224,30 +225,21 @@ class Expressly_Expressly_CustomerController extends AbstractController
                     ->collectTotals()
                     ->save();
             }
+            \Mage::getSingleton('checkout/session')->setCartWasUpdated(
+                !empty($json['cart']['couponCode']) ||
+                !empty($json['cart']['productId']));
 
             $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/success');
             return;
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
+            $xlyerror = $e->getMessage();
         }
 
         if (!$exists) {
-            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed');
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed?e=' . urlencode($xlyerror));
         } else {
-            $this->mimicFrontPage();
-
-            $js = '<script type="text/javascript">
-                (function () {
-                    setTimeout(function() {
-                        var login = confirm("Your email address has already been registered on this store. Please login with your credentials. Pressing OK will redirect you to the login page.");
-                        if (login) {
-                            window.location.replace("' . Mage::getUrl('customer/account/login') . '");
-                        }
-                    }, 500);
-                })();
-            </script>';
-
-            $this->getResponse()->appendBody($js);
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/exists?loginUrl=' . urlencode(Mage::getBaseUrl() . 'customer/account/login') );
         }
     }
 
