@@ -14,11 +14,13 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # make a target dir so we can have a clean distribution
 echo "[Copying extension files to target]"
 mkdir -p ${DIR}/out/src
-rsync -a  ${DIR}/LICENSE ${DIR}/app ${DIR}/out/src
+#rsync -a --exclude "app/code/community/Expressly/Expressly/vendor" --exclude "app/code/community/Expressly/Expressly/composer.lock" ${DIR}/LICENSE ${DIR}/app ${DIR}/out/src
+rsync -a --exclude "app/code/community/Expressly/Expressly/vendor" --exclude "app/code/community/Expressly/Expressly/composer.lock" ${DIR}/LICENSE ${DIR}/app ${DIR}/out/src
 
 # install dependencies
 echo "[Installing dependencies]"
 pushd "${DIR}/out/src/app/code/community/Expressly/Expressly"
+#rm -f composer.lock
 composer install --no-dev
 popd
 

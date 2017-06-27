@@ -20,7 +20,7 @@ class Expressly_Expressly_UtilityController extends AbstractController
         $route = $this->resolver->process(preg_replace('/.*(expressly\/.*)/i', '/${1}', $_SERVER['REQUEST_URI']));
 
         if ($route instanceof Route) {
-            $presenter = new RegisteredPresenter();
+            $presenter = new RegisteredPresenter("Magento", \Mage::getVersion());
             $this->getResponse()->setBody(json_encode($presenter->toArray()));
         } else {
             $this->getResponse()->setHttpResponseCode(401);

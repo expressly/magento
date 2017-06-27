@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <layout>
-    <!--<expressly_expressly_customercontroller_popup>-->
-        <!--<reference name="head">-->
-            <!--<action method="addJs">-->
-                <!--<script>js/expressly.migrate.js</script>-->
-            <!--</action>-->
-        <!--</reference>-->
-    <!--</expressly_expressly_customercontroller_popup>-->
+    <default>
+        <reference name="before_body_end">
+            <block type="core/text" name="expressly.trigger">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<script type="text/javascript" src="https://assets01.buyexpressly.com/lightbox/trigger-v2.js"></script>]]>
+                    </text>
+                </action>
+            </block>
+        </reference>
+    </default>
 </layout>
