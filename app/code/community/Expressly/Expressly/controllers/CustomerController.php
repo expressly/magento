@@ -144,7 +144,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
                     ->setLastname($customer['lastName'])
                     ->setEmail($email)
                     ->setPassword(md5('xly' . microtime()))
-                    ->setIsSubscribed(true);
+                    ->setIsSubscribed(!$customer['optoutNewsletter']);
 
                 if ($customer['dob']) {
                     $mageCustomer->setDob($customer['dob']);
@@ -260,8 +260,7 @@ class Expressly_Expressly_CustomerController extends AbstractController
             $this->getResponse()->appendBody($event->getContent());
         } catch (\Exception $e) {
             $this->logger->error(ExceptionFormatter::format($e));
-
-            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed');
+            $this->getResponse()->setRedirect('https://prod.expresslyapp.com/api/redirect/migration/' . $uuid . '/failed?e=' . urlencode($e->getMessage()));
         }
     }
 
